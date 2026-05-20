@@ -1,24 +1,30 @@
 # lol-helper
 
-Desktop helper all-in-one cho League of Legends. Chạy song song với LoL client để tự động accept trận, gợi ý counter pick, import build/rune và xem match history.
+Desktop helper all-in-one cho League of Legends. Chạy song song với LoL client để tự động accept trận, xem match history, gợi ý counter pick và import build/rune.
 
 ## Trạng thái
 
-Đang ở Phase 0 - Bootstrap. Chưa có tính năng nào hoàn thiện.
+**Phase 1 - Core Features** đang hoàn thiện.
 
-## Tính năng dự kiến (MVP)
+### Tính năng đã hoạt động
 
-- **Auto-Accept**: tự bấm Accept khi tìm được trận
+| Tính năng | Backend | UI | Ghi chú |
+|-----------|---------|-----|---------|
+| Auto-Accept | ✅ | ✅ | Tự bấm Accept khi tìm được trận |
+| Match History | ✅ | ⚠️ | Dữ liệu đúng, UI đang cần chỉnh sửa |
+
+### Tính năng đang phát triển
+
 - **Champion Picker**: gợi ý counter / build theo lane và tướng địch
-- **Match History**: xem lịch sử đấu, win rate theo tướng
 - **Build/Rune Importer**: import item set + rune page vào client với 1 click
+- **Overlay**: hiển thị thông tin realtime trong game
 
 ## Stack
 
-- Electron 30 + electron-vite
+- Electron 32 + electron-vite
 - React 18 + TypeScript
-- Zustand (state)
-- league-connect (LCU API)
+- Zustand (state management)
+- WebSocket (LCU API)
 - axios (Riot Web API)
 - electron-builder (đóng gói)
 
@@ -26,7 +32,7 @@ Desktop helper all-in-one cho League of Legends. Chạy song song với LoL clie
 
 - Node.js >= 18 LTS
 - npm hoặc pnpm
-- LoL client (để test các module liên quan LCU; trên macOS dev sẽ stub)
+- LoL client đang chạy (để kết nối LCU API)
 
 ## Cài đặt
 
@@ -45,16 +51,25 @@ npm run dev
 ```bash
 npm run build       # type-check + bundle
 npm run dist        # tạo installer cho OS hiện tại
+npm run dist:mac    # build cho macOS
+npm run dist:win    # build cho Windows
 ```
 
 ## Cấu trúc thư mục
 
 ```
 electron/
-  main/         # Electron main process (LCU, Riot API, IPC)
-  preload/      # contextBridge expose window.api
-src/            # Renderer React app
-memory-bank/    # Tài liệu thiết kế nội bộ
+  main/           # Electron main process
+    lcu/          # LCU client, lockfile, live client
+    modules/      # Auto-accept, match history, overlay
+  preload/        # contextBridge expose window.api
+src/              # Renderer React app
+  app/            # App root component
+  components/     # Shared components (Sidebar, StatusBar)
+  features/       # Feature modules (autoAccept, matchHistory, ...)
+  styles/         # Global CSS
+shared/           # Shared types (IPC channels)
+scripts/          # Dev/test scripts
 ```
 
 ## Disclaimer
@@ -63,4 +78,4 @@ Công cụ này dùng LCU API công khai của Riot, không inject vào tiến t
 
 ## License
 
-MIT (sẽ thêm file LICENSE sau).
+MIT
