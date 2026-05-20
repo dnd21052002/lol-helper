@@ -1,34 +1,38 @@
 # Active Context
 
 ## Current Focus
-Champion Picker đã được nâng cấp xong. Tiếp theo có thể: mở rộng counter data, hoặc chuyển sang Phase 5 (Build/Rune Importer), hoặc cleanup Phase 1 (persist settings).
+Auto Ranked feature hoàn thành. Full automation flow từ tạo lobby → chọn role → queue → ban → pick → lock → apply runes.
 
 ## Recent Changes
-- **Champion Picker enhanced** (Phase 4.5):
-  - Thêm role filter tabs (All/Fighter/Tank/Mage/Assassin/Marksman/Support)
-  - Champion detail panel khi click: avatar 64px, title italic, tag chips, stat bars (ATK/DEF/MAG với màu), difficulty dots (10 chấm), lore blurb
-  - Counter badge ⚔️ trên champion tiles có counter data
-  - `ChampionInfo` interface mở rộng: thêm `info` (attack/defense/magic/difficulty) và `blurb` từ DDragon
-  - `shared/counterData.ts` — move counter data sang shared folder để renderer import sạch
-  - CSS mới: `.role-tabs`, `.champion-detail-panel`, `.stat-bar-*`, `.difficulty-dots`, `.tag-chip`, `.counter-badge`
-  - Build pass clean (tsc + electron-vite build cả 3 bundles)
+- **Auto Ranked** (new feature):
+  - `electron/main/modules/autoRanked.ts` — AutoRankedModule class (~450 lines): lobby creation, queue start, ban/pick automation with timing delays and retry logic, rune application
+  - `shared/ipc.ts` — Added AutoRankedSettings, AutoRankedState, RunePageConfig interfaces and IpcChannels.autoRanked entries
+  - `electron/preload/index.ts` — Added autoRanked API bindings
+  - `electron/main/index.ts` — Added autoRanked module import, IPC handlers, broadcast wiring, lifecycle
+  - `src/features/autoRanked/AutoRankedPage.tsx` — React UI with searchable champion select, role selectors, enable toggle, start queue button, live state display
+  - `src/components/Sidebar.tsx` — Added Auto Ranked nav entry (🏆)
+  - `src/main.tsx` — Added route `/auto-ranked`
+  - `src/styles/global.css` — ~200 lines CSS for auto-ranked page and champion select component
+  - Bug fix: ban phase timing — added 800ms delay before ban execution + retry logic khi ban fail do chưa đến phase
 
 ## Next Steps (theo thứ tự ưu tiên)
-1. Mở rộng counter data (thêm nhiều champion hơn) hoặc tìm cách scrape từ u.gg
-2. Phase 1 cleanup: persist auto-accept settings + log UI
-3. Phase 5: Build/Rune Importer
-4. Phase 2: In-Game Overlay (spell tracker, counter tips live)
+1. Test Auto Ranked trên LoL client thật (Windows)
+2. Phase 1 cleanup: persist settings (auto-accept + auto-ranked) sang disk
+3. Mở rộng counter data (thêm nhiều champion hơn)
+4. Phase 5: Build/Rune Importer (standalone, ngoài auto-ranked flow)
+5. Phase 2: In-Game Overlay
 
 ## Active Decisions
-- Bỏ qua in-game overlay và auto pick/ban ở v1 vì rủi ro ToS.
-- Dùng CSS thuần thay vì Tailwind ở v1, có thể migrate sau.
-- HashRouter (không phải BrowserRouter) vì Electron load file://.
+- Auto Ranked dùng polling LCU champ-select session (500ms interval) thay vì WebSocket event vì cần state machine phức tạp.
+- Ban delay 800ms + retry để handle race condition khi vào champ select.
+- Champion select dropdown reuse DDragon data từ championPicker module.
+- Dùng CSS thuần thay vì Tailwind ở v1.
+- HashRouter cho Electron file:// protocol.
 - Tất cả LCU/Riot calls ở main process; renderer chỉ gọi qua IPC.
 - LCU client tự viết, không dùng `league-connect`.
-- Counter data ở `shared/` folder — pure data, importable từ cả main và renderer bundles.
-- `ChampionInfo` giờ chứa đủ data để hiển thị rich detail mà không cần thêm API call.
 
 ## Open Questions
+- Auto Ranked cần test thực tế trên Windows với LoL client.
+- Rune page apply: cần xác nhận flow PUT vs DELETE+POST khi đã có page tồn tại.
 - Counter data chỉ cover 18 champs. Cần scrape từ u.gg/op.gg hoặc dùng community API?
 - App icon và branding: tạm dùng placeholder.
-- Có cần auto-update (electron-updater) ngay v1 không? → Để post-MVP.

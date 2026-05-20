@@ -6,6 +6,7 @@ import { AutoAcceptPanel } from './features/autoAccept/AutoAcceptPanel';
 import ChampionPickerPage from './features/championPicker/ChampionPickerPage';
 import { MatchHistoryPage } from './features/matchHistory/MatchHistoryPage';
 import { BuildImporterPage } from './features/buildImporter/BuildImporterPage';
+import { AutoRankedPage } from './features/autoRanked/AutoRankedPage';
 import { OverlayPage } from './features/overlay/OverlayPage';
 import './styles/global.css';
 
@@ -18,6 +19,7 @@ createRoot(root).render(
       <Routes>
         <Route element={<App />}>
           <Route index element={<AutoAcceptPanel />} />
+          <Route path="auto-ranked" element={<AutoRankedPage />} />
           <Route path="champion-picker" element={<ChampionPickerPage />} />
           <Route path="match-history" element={<MatchHistoryPage />} />
           <Route path="build-importer" element={<BuildImporterPage />} />

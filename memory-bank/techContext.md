@@ -38,39 +38,45 @@ lol-helper/
 ├── memory-bank/              # tài liệu nội bộ
 ├── electron/
 │   ├── main/
-│   │   ├── index.ts          # entry main process
-│   │   ├── ipc.ts            # đăng ký IPC handlers
+│   │   ├── index.ts          # entry main process + IPC handlers
 │   │   ├── lcu/
-│   │   │   ├── client.ts     # kết nối LCU
-│   │   │   └── events.ts     # subscribe WebSocket events
+│   │   │   ├── client.ts     # LCU HTTPS + WebSocket WAMP client
+│   │   │   ├── lockfile.ts   # Discover LCU credentials
+│   │   │   └── liveClient.ts # Live Client Data API
 │   │   ├── modules/
 │   │   │   ├── autoAccept.ts
+│   │   │   ├── autoRanked.ts # Full ranked automation
+│   │   │   ├── championPicker.ts
 │   │   │   ├── matchHistory.ts
-│   │   │   └── buildImporter.ts
-│   │   └── riot/
-│   │       └── api.ts        # Riot Web API client
+│   │   │   └── overlay.ts
+│   │   └── data/
+│   │       └── counterData.ts
 │   └── preload/
 │       └── index.ts          # expose contextBridge API
+├── shared/
+│   ├── ipc.ts                # IPC channel types & interfaces
+│   └── counterData.ts        # Counter data shared main+renderer
 ├── src/                      # renderer (React)
 │   ├── main.tsx
-│   ├── App.tsx
-│   ├── routes/
-│   │   ├── AutoAccept.tsx
-│   │   ├── ChampionPicker.tsx
-│   │   ├── MatchHistory.tsx
-│   │   └── BuildImporter.tsx
+│   ├── app/App.tsx
+│   ├── features/
+│   │   ├── autoAccept/AutoAcceptPanel.tsx
+│   │   ├── autoRanked/AutoRankedPage.tsx
+│   │   ├── championPicker/ChampionPickerPage.tsx
+│   │   ├── matchHistory/MatchHistoryPage.tsx
+│   │   ├── buildImporter/BuildImporterPage.tsx
+│   │   └── overlay/OverlayPage.tsx
 │   ├── components/
-│   │   └── Sidebar.tsx
-│   ├── store/
-│   │   └── lcuStore.ts
+│   │   ├── Sidebar.tsx
+│   │   └── LcuStatusBar.tsx
 │   ├── styles/
 │   │   └── global.css
 │   └── types/
-│       └── ipc.d.ts
-├── resources/                # icon, splash
+│       └── global.d.ts
+├── scripts/
+│   └── smoke-lcu.mjs
 ├── electron.vite.config.ts
 ├── tsconfig.json
-├── tsconfig.node.json
 ├── package.json
 ├── .gitignore
 └── README.md

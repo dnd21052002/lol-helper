@@ -2,9 +2,10 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { join } from 'node:path';
 import { IpcChannels } from '../../shared/ipc';
-import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo } from '../../shared/ipc';
+import type { IpcResult, AutoAcceptSettings, AutoRankedSettings, AutoRankedState, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo } from '../../shared/ipc';
 import { lcuClient } from './lcu/client';
 import { autoAccept } from './modules/autoAccept';
+import { autoRanked } from './modules/autoRanked';
 import { fetchMatchHistory } from './modules/matchHistory';
 import { startChampionPicker, stopChampionPicker, getChampions, getDdragonVersion, getChampSelectSession, onSessionChanged } from './modules/championPicker';
 import { getCountersFor } from './data/counterData';
@@ -94,6 +95,36 @@ function registerIpc(): void {
     }
   );
 
+  // Auto Ranked
+  ipcMain.handle(IpcChannels.autoRanked.getSettings, (): IpcResult<AutoRankedSettings> => {
+    return { ok: true, data: autoRanked.getSettings() };
+  });
+
+  ipcMain.handle(
+    IpcChannels.autoRanked.setSettings,
+    (_evt, patch: Partial<AutoRankedSettings>): IpcResult<AutoRankedSettings> => {
+      try {
+        const next = autoRanked.setSettings(patch);
+        return { ok: true, data: next };
+      } catch (err) {
+        return { ok: false, error: String(err) };
+      }
+    }
+  );
+
+  ipcMain.handle(IpcChannels.autoRanked.getState, (): IpcResult<AutoRankedState> => {
+    return { ok: true, data: autoRanked.getState() };
+  });
+
+  ipcMain.handle(IpcChannels.autoRanked.startQueue, async (): Promise<IpcResult<void>> => {
+    try {
+      await autoRanked.startQueue();
+      return { ok: true, data: undefined };
+    } catch (err) {
+      return { ok: false, error: String(err) };
+    }
+  });
+
   // Match history
   ipcMain.handle(
     IpcChannels.matchHistory.fetch,
@@ -127,6 +158,12 @@ function wireBroadcasts(): void {
       win.webContents.send(IpcChannels.championPicker.onSessionChanged, session);
     });
   });
+
+  autoRanked.onStateChanged((state) => {
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(IpcChannels.autoRanked.onStateChanged, state);
+    });
+  });
 }
 
 void app.whenReady().then(async () => {
@@ -134,6 +171,7 @@ void app.whenReady().then(async () => {
   registerIpc();
   wireBroadcasts();
   autoAccept.start();
+  autoRanked.start();
   void startChampionPicker();
   void lcuClient.start();
   createWindow();
@@ -150,5 +188,6 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   void lcuClient.stop();
   autoAccept.stop();
+  autoRanked.stop();
   stopChampionPicker();
 });

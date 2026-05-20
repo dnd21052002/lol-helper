@@ -75,6 +75,31 @@ export interface ChampionPickerData {
   ddragonVersion: string;
 }
 
+// ─── Auto Ranked ─────────────────────────────────────────────────────────────
+
+export interface RunePageConfig {
+  name: string;
+  primaryStyleId: number;
+  subStyleId: number;
+  selectedPerkIds: number[];
+}
+
+export interface AutoRankedSettings {
+  enabled: boolean;
+  primaryRole: string;
+  secondaryRole: string;
+  banChampionIds: number[];
+  pickChampionIds: number[];
+  autoStartQueue: boolean;
+  runes: RunePageConfig | null;
+  itemSetId: string | null;
+}
+
+export interface AutoRankedState {
+  step: string;
+  message: string;
+}
+
 // ─── Match History ───────────────────────────────────────────────────────────
 
 export interface MatchHistoryEntry {
@@ -126,6 +151,13 @@ export const IpcChannels = {
     getSession: 'championPicker:getSession',
     getCounters: 'championPicker:getCounters',
     onSessionChanged: 'championPicker:sessionChanged'
+  },
+  autoRanked: {
+    getSettings: 'autoRanked:getSettings',
+    setSettings: 'autoRanked:setSettings',
+    getState: 'autoRanked:getState',
+    startQueue: 'autoRanked:startQueue',
+    onStateChanged: 'autoRanked:stateChanged'
   },
   matchHistory: {
     fetch: 'matchHistory:fetch'

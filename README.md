@@ -4,12 +4,13 @@ Desktop helper all-in-one cho League of Legends. Chạy song song với LoL clie
 
 ## Trạng thái
 
-**Phase 4 hoàn thành** — Champion Picker với rich detail panel. Đang hướng tới Phase 5 (Build/Rune Importer).
+**Auto Ranked hoàn thành** — Full automation từ tạo lobby đến lock champion + apply runes.
 
 ### Tính năng đã hoạt động
 
 | Tính năng | Backend | UI | Ghi chú |
 |-----------|---------|-----|---------|
+| Auto Ranked | ✅ | ✅ | Tạo lobby, chọn role, queue, ban, pick, lock, apply runes — full automation |
 | Auto-Accept | ✅ | ✅ | Tự bấm Accept khi tìm được trận, configurable delay |
 | Match History | ✅ | ✅ | 20 trận gần nhất, filter theo champion/queue, champion name từ DDragon |
 | Champion Picker | ✅ | ✅ | Grid champion, role filter, detail panel (stats/difficulty/lore), counter badge |
@@ -17,9 +18,9 @@ Desktop helper all-in-one cho League of Legends. Chạy song song với LoL clie
 
 ### Tính năng đang phát triển
 
-- **Build/Rune Importer** (Phase 5): import item set + rune page vào client với 1 click
+- **Build/Rune Importer** (Phase 5): import item set + rune page vào client với 1 click (standalone)
 - **In-Game Overlay** (Phase 2): spell tracker, counter tips, build suggestion realtime
-- **Phase 1 cleanup**: persist auto-accept settings, log UI chi tiết
+- **Persist settings**: lưu cấu hình auto-accept + auto-ranked sang disk
 
 ## Stack
 

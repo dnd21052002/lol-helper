@@ -19,6 +19,15 @@
   - Counter badge (⚔️) trên tile có counter data
   - DDragon API fetch thêm `info` (attack/defense/magic/difficulty) và `blurb`
   - `shared/counterData.ts` — counter data dùng chung cho cả main và renderer
+- **Auto Ranked** (Phase 6 — full automation):
+  - Tạo ranked lobby (solo/duo hoặc flex), chọn role (primary + secondary)
+  - Auto start queue, auto accept ready check
+  - Auto ban champion (với 800ms delay chờ ban phase, retry logic)
+  - Auto pick + lock champion
+  - Auto apply rune page (PUT `/lol-perks/v1/pages/{id}`)
+  - Searchable champion select dropdown (DDragon images, filter by name)
+  - React UI: role selectors, champion dropdowns, enable toggle, start queue button, live state display
+  - Build pass clean
 
 ## What's In Progress
 - Persist settings auto-accept và bổ sung log UI (Phase 1 cleanup)
