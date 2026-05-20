@@ -84,7 +84,7 @@ lol-helper/
 
 ## Technical Constraints
 - LCU API yêu cầu LoL client đang chạy. App phải xử lý gracefully khi client offline (poll lại mỗi 3-5s).
-- LCU dùng HTTPS với self-signed cert → cần bypass cert verification (league-connect lo phần này).
+- LCU dùng HTTPS với self-signed cert → bypass cert verification trong `client.ts` (`rejectUnauthorized: false`).
 - Riot Web API key dev chỉ tồn tại 24h, rate limit thấp. Production cần xin Personal/Production key.
 - macOS không có LoL client chính thức cho Apple Silicon native → một số module (auto-accept, build importer) chỉ test được trên Windows hoặc qua Boot Camp/Parallels. Dev trên macOS thì stub LCU.
 

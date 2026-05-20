@@ -13,6 +13,12 @@
 - `npm install` + `npm run build` pass cả 3 stage (main / preload / renderer)
 - `npm run typecheck` pass
 - **Smoke test trên Mac thật** (`scripts/smoke-lcu.mjs`) chạy OK: lockfile parsed, summoner fetched (Butterfly#DND lv168), gameflow phase = `None`, WS open
+- **Champion Picker nâng cấp** (Phase 4.5):
+  - Role filter tabs (All/Fighter/Tank/Mage/Assassin/Marksman/Support)
+  - Champion detail panel: avatar, title, tags, stat bars (ATK/DEF/MAG), difficulty dots, lore blurb
+  - Counter badge (⚔️) trên tile có counter data
+  - DDragon API fetch thêm `info` (attack/defense/magic/difficulty) và `blurb`
+  - `shared/counterData.ts` — counter data dùng chung cho cả main và renderer
 
 ## What's In Progress
 - Persist settings auto-accept và bổ sung log UI (Phase 1 cleanup)
@@ -57,10 +63,13 @@
 - [x] IPC contract + preload binding + typecheck pass
 
 ### Phase 4 - Champion Picker
-- [ ] Cache Data Dragon (champions, items, runes) theo version
-- [ ] UI grid champion + ô nhập tướng địch
-- [ ] Hiển thị counter (data tĩnh ban đầu, scrape sau)
-- [ ] Sync với champion select hiện tại (tự nhảy tab)
+- [x] Cache Data Dragon (champions list) theo version, auto-refresh mỗi 6h
+- [x] UI grid champion + search filter + counter tips panel
+- [x] Hiển thị counter (static data cho top 18 champs, extensible)
+- [x] Sync với champion select hiện tại (poll LCU `/lol-champ-select/v1/session`, broadcast session changes)
+- [x] **Enhanced UI**: role filter tabs, champion detail panel (stats/difficulty/blurb), counter badge
+- [x] **Extended ChampionInfo**: fetch `info` (attack/defense/magic/difficulty) + `blurb` từ DDragon
+- [x] **Shared counter data**: `shared/counterData.ts` accessible từ cả main và renderer
 
 ### Phase 5 - Build/Rune Importer
 - [ ] Định nghĩa format build JSON nội bộ
@@ -82,13 +91,15 @@
 - [ ] Phase 1 done (cần test + persist settings + log UI)
 - [ ] Phase 2 done
 - [x] Phase 3 done
-- [ ] Phase 4 done
+- [x] Phase 4 done (enhanced with rich detail panel)
 - [ ] Phase 5 done
 
 ## Known Issues
 - Settings auto-accept hiện chỉ giữ in-memory, mất khi tắt app. Cần persist ở Phase 1 cleanup.
 - Riot Web API key: chưa apply, sẽ làm khi vào Phase 2.
 - 21 npm vulnerabilities từ transitive deps của electron-builder (4 low / 3 mod / 14 high). Phần lớn nằm ở build-time, chưa fix vội.
+- Counter data hiện tại chỉ cover ~18 champion phổ biến. Cần mở rộng hoặc scrape từ u.gg/op.gg.
 
 ## Resolved Issues
 - ~~Dev trên macOS: league-connect không tìm được LoL client process~~ → Đã thay bằng LCU client tự viết, scan đúng process `LeagueClient` trên macOS và đọc lockfile ở `/Applications/League of Legends.app/Contents/LoL/lockfile`.
+- ~~Champion Picker quá sơ sài~~ → Đã nâng cấp với role tabs, detail panel (stats bars, difficulty dots, lore), counter badge trên tiles.

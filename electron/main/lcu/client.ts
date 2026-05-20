@@ -81,6 +81,12 @@ export class LcuClient extends EventEmitter {
 
     try {
       const summoner = await this.fetchSummoner();
+      if (!summoner) {
+        // LCU lockfile exists but API not ready yet — retry without resetting to disconnected
+        log.debug('[lcu] summoner not available yet, retrying');
+        this.scheduleReconnect(true);
+        return;
+      }
       const phase = await this.fetchGameflow();
       this.setStatus({
         state: 'connected',
@@ -94,7 +100,7 @@ export class LcuClient extends EventEmitter {
     }
   }
 
-  private scheduleReconnect(): void {
+  private scheduleReconnect(keepConnecting = false): void {
     if (this.stopped) return;
     if (this.ws) {
       try {
@@ -105,7 +111,9 @@ export class LcuClient extends EventEmitter {
       }
       this.ws = null;
     }
-    this.setStatus({ state: 'disconnected' });
+    if (!keepConnecting) {
+      this.setStatus({ state: 'disconnected' });
+    }
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
     this.reconnectTimer = setTimeout(() => {
       void this.connectLoop();

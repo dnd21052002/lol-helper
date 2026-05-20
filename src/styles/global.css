@@ -176,3 +176,510 @@ a {
   color: rgba(255, 255, 255, 0.6);
   font-size: 12px;
 }
+
+/* ─── Champion Picker ─────────────────────────────────────────────────────── */
+
+.champion-picker-page h1 {
+  margin: 0 0 16px;
+}
+
+.champ-select-live {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.champ-select-live h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.teams-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.team-col h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.player-row.is-local {
+  background: rgba(200, 155, 60, 0.1);
+  border: 1px solid rgba(200, 155, 60, 0.3);
+}
+
+.player-row.enemy {
+  color: var(--text);
+}
+
+.player-role {
+  min-width: 56px;
+  color: var(--text-dim);
+  text-transform: capitalize;
+  font-size: 12px;
+}
+
+.player-champ {
+  flex: 1;
+}
+
+.you-badge {
+  font-size: 10px;
+  background: var(--accent);
+  color: #000;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.counter-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: border-color 0.15s;
+}
+
+.counter-btn:hover {
+  border-color: var(--accent);
+}
+
+.bans-row {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.bans-label {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.ban-chip {
+  font-size: 11px;
+  background: rgba(248, 81, 73, 0.15);
+  color: var(--danger);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+/* Counter Panel */
+
+.counter-panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.counter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.counter-header h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.close-btn:hover {
+  color: var(--text);
+  background: var(--border);
+}
+
+.no-data {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.counter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.counter-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.counter-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+}
+
+.counter-info {
+  flex: 1;
+}
+
+.counter-name {
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.win-rate {
+  font-size: 12px;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.counter-tip {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* Champion Grid */
+
+.champion-grid-section {
+  margin-top: 8px;
+}
+
+.grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.grid-header h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.search-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: var(--text);
+  font-size: 13px;
+  width: 220px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+.champion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.champion-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.champion-tile:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.champion-tile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.champ-name {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 64px;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 24px;
+}
+
+/* ─── Role Filter Tabs ────────────────────────────────────────────────────── */
+
+.role-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.role-tab {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  transition: all 0.15s;
+}
+
+.role-tab:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.role-tab.active {
+  background: rgba(200, 155, 60, 0.15);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+/* ─── Champion Detail Panel ───────────────────────────────────────────────── */
+
+.champion-detail-panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.detail-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  flex-shrink: 0;
+}
+
+.detail-title-block {
+  flex: 1;
+}
+
+.detail-title-block h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.detail-title {
+  margin: 2px 0 8px;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-chip {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.tag-counter {
+  background: rgba(200, 155, 60, 0.15);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+/* Detail Body */
+
+.detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+}
+
+.stat-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-label {
+  width: 60px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.stat-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.stat-value {
+  width: 20px;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+/* Difficulty Dots */
+
+.difficulty-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dot.filled {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+/* Blurb */
+
+.detail-blurb {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* Counters inside detail */
+
+.detail-counters h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* Counter badge on champion tile */
+
+.champion-tile.selected {
+  border-color: var(--accent-strong);
+  background: rgba(200, 155, 60, 0.1);
+}
+
+.champion-tile.has-counter {
+  position: relative;
+}
+
+.counter-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Loading state */
+
+.loading-state {
+  color: var(--text-dim);
+  text-align: center;
+  padding: 48px 0;
+}
+
+.page-container {
+  max-width: 900px;
+}

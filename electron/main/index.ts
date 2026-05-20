@@ -2,10 +2,12 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { join } from 'node:path';
 import { IpcChannels } from '../../shared/ipc';
-import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse } from '../../shared/ipc';
+import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo } from '../../shared/ipc';
 import { lcuClient } from './lcu/client';
 import { autoAccept } from './modules/autoAccept';
 import { fetchMatchHistory } from './modules/matchHistory';
+import { startChampionPicker, stopChampionPicker, getChampions, getDdragonVersion, getChampSelectSession, onSessionChanged } from './modules/championPicker';
+import { getCountersFor } from './data/counterData';
 
 log.transports.file.level = 'info';
 log.transports.console.level = 'debug';
@@ -76,6 +78,22 @@ function registerIpc(): void {
     return { ok: true, data: autoAccept.getStats() };
   });
 
+  // Champion Picker
+  ipcMain.handle(IpcChannels.championPicker.getChampions, (): IpcResult<ChampionPickerData> => {
+    return { ok: true, data: { champions: getChampions(), ddragonVersion: getDdragonVersion() } };
+  });
+
+  ipcMain.handle(IpcChannels.championPicker.getSession, (): IpcResult<ChampSelectSession> => {
+    return { ok: true, data: getChampSelectSession() };
+  });
+
+  ipcMain.handle(
+    IpcChannels.championPicker.getCounters,
+    (_evt, enemyChampionId: number): IpcResult<CounterTipInfo[]> => {
+      return { ok: true, data: getCountersFor(enemyChampionId) };
+    }
+  );
+
   // Match history
   ipcMain.handle(
     IpcChannels.matchHistory.fetch,
@@ -103,6 +121,12 @@ function wireBroadcasts(): void {
       win.webContents.send(IpcChannels.autoAccept.onStatsChanged, stats);
     });
   });
+
+  onSessionChanged((session) => {
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(IpcChannels.championPicker.onSessionChanged, session);
+    });
+  });
 }
 
 void app.whenReady().then(async () => {
@@ -110,6 +134,7 @@ void app.whenReady().then(async () => {
   registerIpc();
   wireBroadcasts();
   autoAccept.start();
+  void startChampionPicker();
   void lcuClient.start();
   createWindow();
 
@@ -125,4 +150,5 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   void lcuClient.stop();
   autoAccept.stop();
+  stopChampionPicker();
 });

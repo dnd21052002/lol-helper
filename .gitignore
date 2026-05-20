@@ -34,3 +34,6 @@ userData/
 
 # Coverage
 coverage/
+
+# CodeGraph
+.codegraph/

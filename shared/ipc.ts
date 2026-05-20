@@ -28,6 +28,53 @@ export interface AutoAcceptStats {
   lastAcceptedAt: number | null;
 }
 
+// ─── Champion Picker ─────────────────────────────────────────────────────────
+
+export interface ChampionInfo {
+  id: number;
+  name: string;
+  title: string;
+  tags: string[];    // e.g. ['Fighter', 'Tank']
+  image: string;
+  info: {
+    attack: number;   // 1-10
+    defense: number;
+    magic: number;
+    difficulty: number;
+  };
+  blurb: string;     // short lore
+}
+
+export interface ChampSelectSession {
+  inChampSelect: boolean;
+  localPlayerCellId: number;
+  myTeam: ChampSelectPlayer[];
+  theirTeam: ChampSelectPlayer[];
+  bans: { myTeamBans: number[]; theirTeamBans: number[] };
+  phase: string;
+}
+
+export interface ChampSelectPlayer {
+  cellId: number;
+  championId: number;
+  championName: string;
+  assignedPosition: string;
+  summonerId: number;
+  isLocalPlayer: boolean;
+}
+
+export interface CounterTipInfo {
+  championId: number;
+  championName: string;
+  winRate: number;
+  tip: string;
+}
+
+export interface ChampionPickerData {
+  champions: ChampionInfo[];
+  ddragonVersion: string;
+}
+
 // ─── Match History ───────────────────────────────────────────────────────────
 
 export interface MatchHistoryEntry {
@@ -73,6 +120,12 @@ export const IpcChannels = {
     setSettings: 'autoAccept:setSettings',
     getStats: 'autoAccept:getStats',
     onStatsChanged: 'autoAccept:statsChanged'
+  },
+  championPicker: {
+    getChampions: 'championPicker:getChampions',
+    getSession: 'championPicker:getSession',
+    getCounters: 'championPicker:getCounters',
+    onSessionChanged: 'championPicker:sessionChanged'
   },
   matchHistory: {
     fetch: 'matchHistory:fetch'

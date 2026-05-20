@@ -3,6 +3,9 @@ import { IpcChannels } from '../../shared/ipc';
 import type {
   AutoAcceptSettings,
   AutoAcceptStats,
+  ChampionPickerData,
+  ChampSelectSession,
+  CounterTipInfo,
   IpcResult,
   LcuStatus,
   MatchHistoryFilter,
@@ -32,6 +35,19 @@ const api = {
       const listener = (_evt: unknown, stats: AutoAcceptStats): void => cb(stats);
       ipcRenderer.on(IpcChannels.autoAccept.onStatsChanged, listener);
       return () => ipcRenderer.removeListener(IpcChannels.autoAccept.onStatsChanged, listener);
+    }
+  },
+  championPicker: {
+    getChampions: (): Promise<IpcResult<ChampionPickerData>> =>
+      ipcRenderer.invoke(IpcChannels.championPicker.getChampions),
+    getSession: (): Promise<IpcResult<ChampSelectSession>> =>
+      ipcRenderer.invoke(IpcChannels.championPicker.getSession),
+    getCounters: (enemyChampionId: number): Promise<IpcResult<CounterTipInfo[]>> =>
+      ipcRenderer.invoke(IpcChannels.championPicker.getCounters, enemyChampionId),
+    onSessionChanged: (cb: (session: ChampSelectSession) => void): (() => void) => {
+      const listener = (_evt: unknown, session: ChampSelectSession): void => cb(session);
+      ipcRenderer.on(IpcChannels.championPicker.onSessionChanged, listener);
+      return () => ipcRenderer.removeListener(IpcChannels.championPicker.onSessionChanged, listener);
     }
   },
   matchHistory: {

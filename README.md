@@ -4,34 +4,37 @@ Desktop helper all-in-one cho League of Legends. Chạy song song với LoL clie
 
 ## Trạng thái
 
-**Phase 1 - Core Features** đang hoàn thiện.
+**Phase 4 hoàn thành** — Champion Picker với rich detail panel. Đang hướng tới Phase 5 (Build/Rune Importer).
 
 ### Tính năng đã hoạt động
 
 | Tính năng | Backend | UI | Ghi chú |
 |-----------|---------|-----|---------|
-| Auto-Accept | ✅ | ✅ | Tự bấm Accept khi tìm được trận |
-| Match History | ✅ | ⚠️ | Dữ liệu đúng, UI đang cần chỉnh sửa |
+| Auto-Accept | ✅ | ✅ | Tự bấm Accept khi tìm được trận, configurable delay |
+| Match History | ✅ | ✅ | 20 trận gần nhất, filter theo champion/queue, champion name từ DDragon |
+| Champion Picker | ✅ | ✅ | Grid champion, role filter, detail panel (stats/difficulty/lore), counter badge |
+| LCU Connection | ✅ | ✅ | Tự viết, cross-platform, auto-reconnect, status bar realtime |
 
 ### Tính năng đang phát triển
 
-- **Champion Picker**: gợi ý counter / build theo lane và tướng địch
-- **Build/Rune Importer**: import item set + rune page vào client với 1 click
-- **Overlay**: hiển thị thông tin realtime trong game
+- **Build/Rune Importer** (Phase 5): import item set + rune page vào client với 1 click
+- **In-Game Overlay** (Phase 2): spell tracker, counter tips, build suggestion realtime
+- **Phase 1 cleanup**: persist auto-accept settings, log UI chi tiết
 
 ## Stack
 
 - Electron 32 + electron-vite
 - React 18 + TypeScript
 - Zustand (state management)
-- WebSocket (LCU API)
-- axios (Riot Web API)
+- WebSocket (LCU WAMP protocol)
+- axios (HTTP requests)
+- CSS thuần (no framework)
 - electron-builder (đóng gói)
 
 ## Yêu cầu
 
 - Node.js >= 18 LTS
-- npm hoặc pnpm
+- npm
 - LoL client đang chạy (để kết nối LCU API)
 
 ## Cài đặt
@@ -51,26 +54,34 @@ npm run dev
 ```bash
 npm run build       # type-check + bundle
 npm run dist        # tạo installer cho OS hiện tại
-npm run dist:mac    # build cho macOS
-npm run dist:win    # build cho Windows
+npm run dist:mac    # build cho macOS (.dmg)
+npm run dist:win    # build cho Windows (.exe)
 ```
 
 ## Cấu trúc thư mục
 
 ```
 electron/
-  main/           # Electron main process
-    lcu/          # LCU client, lockfile, live client
-    modules/      # Auto-accept, match history, overlay
-  preload/        # contextBridge expose window.api
-src/              # Renderer React app
-  app/            # App root component
-  components/     # Shared components (Sidebar, StatusBar)
-  features/       # Feature modules (autoAccept, matchHistory, ...)
-  styles/         # Global CSS
-shared/           # Shared types (IPC channels)
-scripts/          # Dev/test scripts
+  main/              # Electron main process
+    lcu/             # LCU client tự viết (lockfile, HTTPS, WebSocket WAMP)
+    modules/         # Feature modules (autoAccept, championPicker, matchHistory, overlay)
+    data/            # Static data (counter data cho main process)
+  preload/           # contextBridge — expose window.api
+src/                 # Renderer (React app)
+  app/               # App root component
+  components/        # Shared components (Sidebar, LcuStatusBar)
+  features/          # Feature pages (autoAccept, championPicker, matchHistory, overlay, buildImporter)
+  styles/            # Global CSS
+shared/              # Shared types & data (IPC channels, counter data)
+scripts/             # Dev/test scripts (smoke-lcu)
 ```
+
+## Kiến trúc
+
+- **Main process** xử lý toàn bộ LCU/Riot API calls. Renderer chỉ giao tiếp qua IPC.
+- **LCU client tự viết** — không dùng `league-connect`. Scan process, đọc lockfile, HTTPS với self-signed cert, WebSocket WAMP auto-reconnect.
+- **HashRouter** cho renderer (Electron load `file://`).
+- **Counter data** ở `shared/` folder — pure data, importable từ cả main và renderer.
 
 ## Disclaimer
 

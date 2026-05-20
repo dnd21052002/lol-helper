@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { App } from './app/App';
 import { AutoAcceptPanel } from './features/autoAccept/AutoAcceptPanel';
-import { ChampionPickerPage } from './features/championPicker/ChampionPickerPage';
+import ChampionPickerPage from './features/championPicker/ChampionPickerPage';
 import { MatchHistoryPage } from './features/matchHistory/MatchHistoryPage';
 import { BuildImporterPage } from './features/buildImporter/BuildImporterPage';
 import { OverlayPage } from './features/overlay/OverlayPage';
