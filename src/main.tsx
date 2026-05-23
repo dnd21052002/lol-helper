@@ -7,7 +7,6 @@ import ChampionPickerPage from './features/championPicker/ChampionPickerPage';
 import { MatchHistoryPage } from './features/matchHistory/MatchHistoryPage';
 import { BuildImporterPage } from './features/buildImporter/BuildImporterPage';
 import { AutoRankedPage } from './features/autoRanked/AutoRankedPage';
-import { OverlayPage } from './features/overlay/OverlayPage';
 import { EnemyTrackerPage } from './features/enemyTracker/EnemyTrackerPage';
 import './styles/global.css';
 
@@ -26,8 +25,7 @@ createRoot(root).render(
           <Route path="build-importer" element={<BuildImporterPage />} />
           <Route path="enemy-tracker" element={<EnemyTrackerPage />} />
         </Route>
-        {/* Overlay route — rendered in separate transparent BrowserWindow */}
-        <Route path="overlay" element={<OverlayPage />} />
+
       </Routes>
     </HashRouter>
   </React.StrictMode>
