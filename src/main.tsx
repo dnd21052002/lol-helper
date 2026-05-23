@@ -6,7 +6,9 @@ import { AutoAcceptPanel } from './features/autoAccept/AutoAcceptPanel';
 import ChampionPickerPage from './features/championPicker/ChampionPickerPage';
 import { MatchHistoryPage } from './features/matchHistory/MatchHistoryPage';
 import { BuildImporterPage } from './features/buildImporter/BuildImporterPage';
+import { AutoRankedPage } from './features/autoRanked/AutoRankedPage';
 import { OverlayPage } from './features/overlay/OverlayPage';
+import { OverlaySettingsPage } from './features/overlay/OverlaySettingsPage';
 import './styles/global.css';
 
 const root = document.getElementById('root');
@@ -18,9 +20,11 @@ createRoot(root).render(
       <Routes>
         <Route element={<App />}>
           <Route index element={<AutoAcceptPanel />} />
+          <Route path="auto-ranked" element={<AutoRankedPage />} />
           <Route path="champion-picker" element={<ChampionPickerPage />} />
           <Route path="match-history" element={<MatchHistoryPage />} />
           <Route path="build-importer" element={<BuildImporterPage />} />
+          <Route path="overlay-settings" element={<OverlaySettingsPage />} />
         </Route>
         {/* Overlay route — rendered in separate transparent BrowserWindow */}
         <Route path="overlay" element={<OverlayPage />} />
