@@ -2,10 +2,12 @@ import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Auto-Accept', icon: '⚡' },
+  { to: '/auto-ranked', label: 'Auto Ranked', icon: '🏆' },
   { to: '/champion-picker', label: 'Champion Picker', icon: '🎯' },
   { to: '/enemy-tracker', label: 'Enemy Tracker', icon: '👁️' },
   { to: '/match-history', label: 'Match History', icon: '📊' },
-  { to: '/build-importer', label: 'Build Importer', icon: '🔧' }
+  { to: '/build-importer', label: 'Build Importer', icon: '🔧' },
+  { to: '/overlay-settings', label: 'Overlay', icon: '🖥️' }
 ];
 
 export function Sidebar(): JSX.Element {

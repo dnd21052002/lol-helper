@@ -5,8 +5,10 @@ import { IpcChannels } from '../../shared/ipc';
 import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo, EnemyTrackerData } from '../../shared/ipc';
 import { lcuClient } from './lcu/client';
 import { autoAccept } from './modules/autoAccept';
+import { autoRanked } from './modules/autoRanked';
 import { fetchMatchHistory } from './modules/matchHistory';
 import { startChampionPicker, stopChampionPicker, getChampions, getDdragonVersion, getChampSelectSession, onSessionChanged } from './modules/championPicker';
+import { startOverlayModule, stopOverlayModule } from './modules/overlay';
 import { getCountersFor } from './data/counterData';
 import { enemyTracker } from './modules/enemyTracker';
 
@@ -95,6 +97,36 @@ function registerIpc(): void {
     }
   );
 
+  // Auto Ranked
+  ipcMain.handle(IpcChannels.autoRanked.getSettings, (): IpcResult<AutoRankedSettings> => {
+    return { ok: true, data: autoRanked.getSettings() };
+  });
+
+  ipcMain.handle(
+    IpcChannels.autoRanked.setSettings,
+    (_evt, patch: Partial<AutoRankedSettings>): IpcResult<AutoRankedSettings> => {
+      try {
+        const next = autoRanked.setSettings(patch);
+        return { ok: true, data: next };
+      } catch (err) {
+        return { ok: false, error: String(err) };
+      }
+    }
+  );
+
+  ipcMain.handle(IpcChannels.autoRanked.getState, (): IpcResult<AutoRankedState> => {
+    return { ok: true, data: autoRanked.getState() };
+  });
+
+  ipcMain.handle(IpcChannels.autoRanked.startQueue, async (): Promise<IpcResult<void>> => {
+    try {
+      await autoRanked.startQueue();
+      return { ok: true, data: undefined };
+    } catch (err) {
+      return { ok: false, error: String(err) };
+    }
+  });
+
   // Match history
   ipcMain.handle(
     IpcChannels.matchHistory.fetch,
@@ -151,6 +183,9 @@ void app.whenReady().then(async () => {
   void lcuClient.start();
   createWindow();
 
+  // Start overlay module after window is created
+  if (mainWindow) startOverlayModule(mainWindow);
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
@@ -165,4 +200,5 @@ app.on('before-quit', () => {
   autoAccept.stop();
   enemyTracker.stop();
   stopChampionPicker();
+  stopOverlayModule();
 });
