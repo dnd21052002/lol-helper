@@ -8,7 +8,7 @@ import { MatchHistoryPage } from './features/matchHistory/MatchHistoryPage';
 import { BuildImporterPage } from './features/buildImporter/BuildImporterPage';
 import { AutoRankedPage } from './features/autoRanked/AutoRankedPage';
 import { OverlayPage } from './features/overlay/OverlayPage';
-import { OverlaySettingsPage } from './features/overlay/OverlaySettingsPage';
+import { EnemyTrackerPage } from './features/enemyTracker/EnemyTrackerPage';
 import './styles/global.css';
 
 const root = document.getElementById('root');
@@ -24,7 +24,7 @@ createRoot(root).render(
           <Route path="champion-picker" element={<ChampionPickerPage />} />
           <Route path="match-history" element={<MatchHistoryPage />} />
           <Route path="build-importer" element={<BuildImporterPage />} />
-          <Route path="overlay-settings" element={<OverlaySettingsPage />} />
+          <Route path="enemy-tracker" element={<EnemyTrackerPage />} />
         </Route>
         {/* Overlay route — rendered in separate transparent BrowserWindow */}
         <Route path="overlay" element={<OverlayPage />} />

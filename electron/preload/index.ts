@@ -8,6 +8,7 @@ import type {
   ChampionPickerData,
   ChampSelectSession,
   CounterTipInfo,
+  EnemyTrackerData,
   IpcResult,
   LcuStatus,
   MatchHistoryFilter,
@@ -74,26 +75,13 @@ const api = {
     fetch: (filter?: MatchHistoryFilter): Promise<IpcResult<MatchHistoryResponse>> =>
       ipcRenderer.invoke(IpcChannels.matchHistory.fetch, filter)
   },
-  overlay: {
-    getSettings: (): Promise<IpcResult<OverlaySettings>> =>
-      ipcRenderer.invoke(IpcChannels.overlay.getSettings),
-    setSettings: (patch: Partial<OverlaySettings>): Promise<IpcResult<OverlaySettings>> =>
-      ipcRenderer.invoke(IpcChannels.overlay.setSettings, patch),
-    getState: (): Promise<IpcResult<OverlayState>> =>
-      ipcRenderer.invoke(IpcChannels.overlay.getState),
-    toggle: (visible: boolean): Promise<IpcResult<boolean>> =>
-      ipcRenderer.invoke(IpcChannels.overlay.toggle, visible),
-    trackSpell: (data: { summonerName: string; championName: string; slot: 'D' | 'F'; spellName: string }): Promise<IpcResult<null>> =>
-      ipcRenderer.invoke(IpcChannels.overlay.trackSpell, data),
-    onGameData: (cb: (data: OverlayGameData) => void): (() => void) => {
-      const listener = (_evt: unknown, data: OverlayGameData): void => cb(data);
-      ipcRenderer.on(IpcChannels.overlay.onGameData, listener);
-      return () => ipcRenderer.removeListener(IpcChannels.overlay.onGameData, listener);
-    },
-    onStateChanged: (cb: (state: OverlayState) => void): (() => void) => {
-      const listener = (_evt: unknown, state: OverlayState): void => cb(state);
-      ipcRenderer.on(IpcChannels.overlay.onStateChanged, listener);
-      return () => ipcRenderer.removeListener(IpcChannels.overlay.onStateChanged, listener);
+  enemyTracker: {
+    getData: (): Promise<IpcResult<EnemyTrackerData>> =>
+      ipcRenderer.invoke(IpcChannels.enemyTracker.getData),
+    onDataChanged: (cb: (data: EnemyTrackerData) => void): (() => void) => {
+      const listener = (_evt: unknown, data: EnemyTrackerData): void => cb(data);
+      ipcRenderer.on(IpcChannels.enemyTracker.onDataChanged, listener);
+      return () => ipcRenderer.removeListener(IpcChannels.enemyTracker.onDataChanged, listener);
     }
   }
 };

@@ -1,70 +1,28 @@
-import { useEffect, useState, useCallback } from 'react';
-import type { OverlayGameData, OverlayEnemy, SpellCooldown, JungleTimer } from '../../../shared/ipc';
+import { useEffect, useState } from 'react';
+import type { EnemyTrackerData } from '../../../shared/ipc';
+import { EnemySpellTracker } from './EnemySpellTracker';
 
 /**
- * Floating Panel page — rendered in a compact side window next to the game.
- * NOT overlaid on the game. Works like Porofessor/OP.GG on macOS.
+ * Overlay page — rendered in the transparent always-on-top BrowserWindow.
+ * Background is fully transparent; only UI elements are visible.
  */
 export function OverlayPage(): JSX.Element {
-  const [gameData, setGameData] = useState<OverlayGameData | null>(null);
+  const [trackerData, setTrackerData] = useState<EnemyTrackerData | null>(null);
 
   useEffect(() => {
-    const off = window.api.overlay.onGameData((data) => {
-      setGameData(data);
+    // Fetch initial data
+    void window.api.enemyTracker.getData().then((res) => {
+      if (res.ok) setTrackerData(res.data);
     });
-    return () => { off(); };
+
+    // Subscribe to realtime updates
+    const off = window.api.enemyTracker.onDataChanged(setTrackerData);
+    return off;
   }, []);
 
-  if (!gameData) {
-    return (
-      <div className="fp-root fp-root--loading">
-        <div className="fp-header">
-          <span className="fp-logo">⚔️ LoL Helper</span>
-        </div>
-        <div className="fp-loading">Waiting for game data...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="fp-root">
-      {/* Draggable header */}
-      <div className="fp-header">
-        <span className="fp-logo">⚔️ LoL Helper</span>
-        <span className="fp-time">{formatTime(gameData.gameTime)}</span>
-      </div>
-
-      <div className="fp-body">
-        {/* Enemy Spell Tracker */}
-        <section className="fp-section">
-          <div className="fp-section__title">Enemy Spells</div>
-          <SpellTracker
-            enemies={gameData.enemies}
-            cooldowns={gameData.spellCooldowns}
-          />
-        </section>
-
-        {/* Jungle Timers */}
-        <section className="fp-section">
-          <div className="fp-section__title">Objectives</div>
-          <JungleTimerPanel
-            timers={gameData.jungleTimers}
-            gameTime={gameData.gameTime}
-          />
-        </section>
-
-        {/* Counter Tips */}
-        {gameData.counterTips.length > 0 && (
-          <section className="fp-section">
-            <div className="fp-section__title">Tips</div>
-            <CounterTipsPanel tips={gameData.counterTips} />
-          </section>
-        )}
-      </div>
-
-      <div className="fp-footer">
-        <span className="fp-hint">F9 to hide • Drag to move</span>
-      </div>
+    <div className="overlay-root">
+      <EnemySpellTracker enemies={trackerData?.enemies ?? []} />
     </div>
   );
 }

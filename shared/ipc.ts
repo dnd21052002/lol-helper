@@ -185,6 +185,34 @@ export interface MatchHistoryResponse {
   summonerId: number;
 }
 
+// ─── Enemy Tracker ───────────────────────────────────────────────────────────
+
+export interface SummonerSpellState {
+  /** Spell display name, e.g. "Flash", "Ignite" */
+  name: string;
+  /** Remaining cooldown in seconds (0 = available) */
+  cooldownRemaining: number;
+  /** Total cooldown in seconds */
+  cooldownTotal: number;
+  /** Unix timestamp (ms) when the spell was last used (0 = never seen used) */
+  lastUsedAt: number;
+}
+
+export interface EnemySpellInfo {
+  summonerName: string;
+  championName: string;
+  /** Summoner spell in slot D */
+  spell1: SummonerSpellState;
+  /** Summoner spell in slot F */
+  spell2: SummonerSpellState;
+}
+
+export interface EnemyTrackerData {
+  enemies: EnemySpellInfo[];
+  /** Unix timestamp (ms) of last successful data fetch */
+  lastUpdatedAt: number;
+}
+
 /**
  * Tên các channel IPC. Đặt theo dạng `domain:action`.
  */
@@ -215,14 +243,9 @@ export const IpcChannels = {
   matchHistory: {
     fetch: 'matchHistory:fetch'
   },
-  overlay: {
-    getSettings: 'overlay:getSettings',
-    setSettings: 'overlay:setSettings',
-    getState: 'overlay:getState',
-    toggle: 'overlay:toggle',
-    trackSpell: 'overlay:trackSpell',
-    onGameData: 'overlay:gameData',
-    onStateChanged: 'overlay:stateChanged'
+  enemyTracker: {
+    getData: 'enemyTracker:getData',
+    onDataChanged: 'enemyTracker:dataChanged'
   },
   app: {
     getVersion: 'app:getVersion'
