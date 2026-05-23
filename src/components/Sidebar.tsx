@@ -5,7 +5,8 @@ const NAV_ITEMS = [
   { to: '/auto-ranked', label: 'Auto Ranked', icon: '🏆' },
   { to: '/champion-picker', label: 'Champion Picker', icon: '🎯' },
   { to: '/match-history', label: 'Match History', icon: '📊' },
-  { to: '/build-importer', label: 'Build Importer', icon: '🔧' }
+  { to: '/build-importer', label: 'Build Importer', icon: '🔧' },
+  { to: '/overlay-settings', label: 'Overlay', icon: '🖥️' }
 ];
 
 export function Sidebar(): JSX.Element {

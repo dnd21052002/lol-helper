@@ -8,6 +8,7 @@ import { autoAccept } from './modules/autoAccept';
 import { autoRanked } from './modules/autoRanked';
 import { fetchMatchHistory } from './modules/matchHistory';
 import { startChampionPicker, stopChampionPicker, getChampions, getDdragonVersion, getChampSelectSession, onSessionChanged } from './modules/championPicker';
+import { startOverlayModule, stopOverlayModule } from './modules/overlay';
 import { getCountersFor } from './data/counterData';
 
 log.transports.file.level = 'info';
@@ -176,6 +177,9 @@ void app.whenReady().then(async () => {
   void lcuClient.start();
   createWindow();
 
+  // Start overlay module after window is created
+  if (mainWindow) startOverlayModule(mainWindow);
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
@@ -190,4 +194,5 @@ app.on('before-quit', () => {
   autoAccept.stop();
   autoRanked.stop();
   stopChampionPicker();
+  stopOverlayModule();
 });
