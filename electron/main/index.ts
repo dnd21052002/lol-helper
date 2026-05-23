@@ -2,12 +2,13 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { join } from 'node:path';
 import { IpcChannels } from '../../shared/ipc';
-import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo } from '../../shared/ipc';
+import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo, EnemyTrackerData } from '../../shared/ipc';
 import { lcuClient } from './lcu/client';
 import { autoAccept } from './modules/autoAccept';
 import { fetchMatchHistory } from './modules/matchHistory';
 import { startChampionPicker, stopChampionPicker, getChampions, getDdragonVersion, getChampSelectSession, onSessionChanged } from './modules/championPicker';
 import { getCountersFor } from './data/counterData';
+import { enemyTracker } from './modules/enemyTracker';
 
 log.transports.file.level = 'info';
 log.transports.console.level = 'debug';
@@ -107,6 +108,11 @@ function registerIpc(): void {
       }
     }
   );
+
+  // Enemy tracker
+  ipcMain.handle(IpcChannels.enemyTracker.getData, (): IpcResult<EnemyTrackerData> => {
+    return { ok: true, data: enemyTracker.getData() };
+  });
 }
 
 function wireBroadcasts(): void {
@@ -127,6 +133,12 @@ function wireBroadcasts(): void {
       win.webContents.send(IpcChannels.championPicker.onSessionChanged, session);
     });
   });
+
+  enemyTracker.onDataChanged((data) => {
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(IpcChannels.enemyTracker.onDataChanged, data);
+    });
+  });
 }
 
 void app.whenReady().then(async () => {
@@ -134,6 +146,7 @@ void app.whenReady().then(async () => {
   registerIpc();
   wireBroadcasts();
   autoAccept.start();
+  enemyTracker.start();
   void startChampionPicker();
   void lcuClient.start();
   createWindow();
@@ -150,5 +163,6 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   void lcuClient.stop();
   autoAccept.stop();
+  enemyTracker.stop();
   stopChampionPicker();
 });

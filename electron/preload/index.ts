@@ -6,6 +6,7 @@ import type {
   ChampionPickerData,
   ChampSelectSession,
   CounterTipInfo,
+  EnemyTrackerData,
   IpcResult,
   LcuStatus,
   MatchHistoryFilter,
@@ -53,6 +54,15 @@ const api = {
   matchHistory: {
     fetch: (filter?: MatchHistoryFilter): Promise<IpcResult<MatchHistoryResponse>> =>
       ipcRenderer.invoke(IpcChannels.matchHistory.fetch, filter)
+  },
+  enemyTracker: {
+    getData: (): Promise<IpcResult<EnemyTrackerData>> =>
+      ipcRenderer.invoke(IpcChannels.enemyTracker.getData),
+    onDataChanged: (cb: (data: EnemyTrackerData) => void): (() => void) => {
+      const listener = (_evt: unknown, data: EnemyTrackerData): void => cb(data);
+      ipcRenderer.on(IpcChannels.enemyTracker.onDataChanged, listener);
+      return () => ipcRenderer.removeListener(IpcChannels.enemyTracker.onDataChanged, listener);
+    }
   }
 };
 

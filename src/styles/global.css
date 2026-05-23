@@ -177,6 +177,151 @@ a {
   font-size: 12px;
 }
 
+/* ─── Enemy Spell Tracker ─────────────────────────────────────────────────── */
+
+.enemy-tracker {
+  min-width: 200px;
+  max-width: 240px;
+}
+
+.enemy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.enemy-row:last-child {
+  border-bottom: none;
+}
+
+.enemy-row__champ {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  min-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.enemy-row__spells {
+  display: flex;
+  gap: 4px;
+}
+
+.spell-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  border: 1px solid;
+}
+
+.spell-badge--ready {
+  background: rgba(63, 185, 80, 0.15);
+  border-color: rgba(63, 185, 80, 0.5);
+}
+
+.spell-badge--cd {
+  background: rgba(248, 81, 73, 0.15);
+  border-color: rgba(248, 81, 73, 0.5);
+}
+
+.spell-badge__name {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 44px;
+}
+
+.spell-badge__cd {
+  color: #f85149;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.spell-badge__ready {
+  color: #3fb950;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* ─── Enemy Spell Tracker (main window table) ─────────────────────────────── */
+
+.tracker-table-wrap {
+  overflow-x: auto;
+}
+
+.tracker-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tracker-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+
+.tracker-row {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.tracker-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tracker-champ {
+  padding: 10px 12px;
+  font-weight: 600;
+}
+
+.tracker-summoner {
+  padding: 10px 12px;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.tracker-spell {
+  padding: 8px 12px;
+  min-width: 90px;
+}
+
+.tracker-spell--ready {
+  color: var(--success);
+}
+
+.tracker-spell--cd {
+  color: var(--danger);
+}
+
+.tracker-spell__name {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tracker-spell__cd {
+  display: block;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
 /* ─── Champion Picker ─────────────────────────────────────────────────────── */
 
 .champion-picker-page h1 {
