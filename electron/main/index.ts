@@ -2,13 +2,12 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { join } from 'node:path';
 import { IpcChannels } from '../../shared/ipc';
-import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo, EnemyTrackerData } from '../../shared/ipc';
+import type { IpcResult, AutoAcceptSettings, LcuStatus, AutoAcceptStats, MatchHistoryFilter, MatchHistoryResponse, ChampionPickerData, ChampSelectSession, CounterTipInfo, EnemyTrackerData, AutoRankedSettings, AutoRankedState } from '../../shared/ipc';
 import { lcuClient } from './lcu/client';
 import { autoAccept } from './modules/autoAccept';
 import { autoRanked } from './modules/autoRanked';
 import { fetchMatchHistory } from './modules/matchHistory';
 import { startChampionPicker, stopChampionPicker, getChampions, getDdragonVersion, getChampSelectSession, onSessionChanged } from './modules/championPicker';
-import { startOverlayModule, stopOverlayModule } from './modules/overlay';
 import { getCountersFor } from './data/counterData';
 import { enemyTracker } from './modules/enemyTracker';
 
@@ -183,8 +182,6 @@ void app.whenReady().then(async () => {
   void lcuClient.start();
   createWindow();
 
-  // Start overlay module after window is created
-  if (mainWindow) startOverlayModule(mainWindow);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -199,6 +196,4 @@ app.on('before-quit', () => {
   void lcuClient.stop();
   autoAccept.stop();
   enemyTracker.stop();
-  stopChampionPicker();
-  stopOverlayModule();
-});
+  stopChampionPicker();});

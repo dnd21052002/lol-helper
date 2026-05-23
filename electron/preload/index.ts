@@ -12,10 +12,7 @@ import type {
   IpcResult,
   LcuStatus,
   MatchHistoryFilter,
-  MatchHistoryResponse,
-  OverlaySettings,
-  OverlayState,
-  OverlayGameData
+  MatchHistoryResponse
 } from '../../shared/ipc';
 
 const api = {

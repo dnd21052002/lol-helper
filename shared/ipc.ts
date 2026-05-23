@@ -100,57 +100,13 @@ export interface AutoRankedState {
   message: string;
 }
 
-// ─── Overlay ─────────────────────────────────────────────────────────────────
-
-export interface OverlaySettings {
-  enabled: boolean;
-  showSpellTracker: boolean;
-  showCounterTips: boolean;
-  showJungleTimers: boolean;
-  opacity: number; // 0.3 - 1.0
-}
-
-export interface OverlayState {
-  isGameActive: boolean;
-  isVisible: boolean;
-}
-
-export interface SpellCooldown {
-  /** Summoner name (riotId) of the enemy */
-  summonerName: string;
-  championName: string;
-  /** 'D' or 'F' */
-  slot: 'D' | 'F';
-  spellName: string;
-  /** Total cooldown in seconds */
-  cooldownTotal: number;
-  /** Timestamp (Date.now()) when spell was used */
-  usedAt: number;
-}
+// ─── Match History ───────────────────────────────────────────────────────────
 
 export interface JungleTimer {
-  objective: 'dragon' | 'baron' | 'riftHerald' | 'blueBuffAlly' | 'blueBuffEnemy' | 'redBuffAlly' | 'redBuffEnemy';
+  objective: 'dragon' | 'baron' | 'riftHerald';
   /** Game time (seconds) when objective respawns. 0 = alive/unknown */
   respawnAt: number;
   label: string;
-}
-
-export interface OverlayGameData {
-  gameTime: number; // seconds
-  enemies: OverlayEnemy[];
-  spellCooldowns: SpellCooldown[];
-  jungleTimers: JungleTimer[];
-  counterTips: string[];
-  myChampionName: string;
-}
-
-export interface OverlayEnemy {
-  summonerName: string;
-  championName: string;
-  level: number;
-  spellD: string;
-  spellF: string;
-  isDead: boolean;
 }
 
 // ─── Match History ───────────────────────────────────────────────────────────
